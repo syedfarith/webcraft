@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Prime</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:rgb(240, 236, 236);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Make sure the body takes at least the full viewport height */
+        }
+
+        header, footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 35px;
+            text-align: center;
+            font-family:Times New Roman;
+            font-size:23px
+        }
+
+        main {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            flex: 1; /* Allow the main section to grow and take the available space */
+        }
+
+        .course-card {
+            background-color:teal;
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            width: 400px;
+            max-width: 100%;
+            max-height: 320px; /* Adjust the max-height as needed */
+            box-sizing: border-box;
+            color: white;
+            overflow: hidden;
+        }
+
+        .course-card:hover {
+            transform: scale(1.05);
+        }
+        #addCourseBtn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color:rgb(117, 91, 42);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+        }
+        #homeBtn {
+            position:fixed;
+            top: 20px;
+            right: 150px;
+            padding: 10px;
+            padding-right:20px;
+            padding-left:20px;
+            background-color:rgb(117, 91, 42);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+        }  
+            
+        #homeBtn:hover,
+        #addCourseBtn:hover {
+            background-color: #2980b9;
+        }
+
+        #addCourseModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px;
+            background-color:grey;
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            width: 400px;
+            text-align: center;
+            box-sizing: border-box;
+            color:black;
+        }
+
+        #closeModalBtn {
+            background-color: #95a5a6;
+            color: #2c3e50;
+            border: none;
+            padding: 8px 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #addCourseModal form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding:20px;
+            margin:10px
+        }
+
+        #addCourseModal label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        #addCourseModal input,
+        #addCourseModal textarea,
+        #addCourseModal button {
+            width: 120%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        #addCourseModal button {
+            background-color:purple;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+         
+        #addCourseModal button:hover {
+            background-color: #2980b9;
+        }
+
+        .delete-btn {
+            background-color: rgb(89, 67, 27);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            cursor: pointer;    
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+            font-size: 14px;
+        }
+
+        .delete-btn:hover {
+            background-color: #5e5e0f;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px; 
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 style="margin: 0;">Two Prime</h1>
+    </header>
+
+    <main>
+    <button id="homeBtn" onclick="goToHomePage()">Home</button>
+        <button id="addCourseBtn" onclick="openModal()">Add Course</button>
+        <div class="course-card">
+            <h2>Python</h2>
+            <p>Description: Python is a high-level, versatile programming language, known for its readability and simplicity.</p>
+            <p>Coordinator: John Doe</p>
+            <p>Date and Time: January 27, 2024 - 10:00 AM</p>
+            <button class="delete-btn" onclick="deleteCourse(this)">Delete</button>
+        </div>
+
+        <div class="course-card">
+            <h2>Ai/Ml</h2>
+            <p>Description:  AI/ML (Artificial Intelligence/Machine Learning) focuses on creating intelligent systems capable of learning and decision-making, often implemented using Python due to its rich ecosystem of libraries and frameworks.</p>
+            <p>Coordinator: Jane Doe</p>
+            <p>Date and Time: January 28, 2024 - 2:00 PM</p>
+            <button class="delete-btn" onclick="deleteCourse(this)">Delete</button>
+        </div>
+         <div class="course-card">
+            <h2>DeepLearning</h2>
+            <p>Description: Deep learning involves training artificial neural networks on large datasets to enable machines to learn and make complex decisions, mimicking the human brain's ability to process information and solve intricate tasks.</p>
+            <p>Coordinator: Jane Doe</p>
+            <p>Date and Time: January 28, 2024 - 2:00 PM</p>
+            <button class="delete-btn" onclick="deleteCourse(this)">Delete</button>
+        </div>
+         <div class="course-card">
+            <h2>DataScience</h2>
+            <p>Description:  Data Science involves extracting insights and knowledge from data through statistical analysis, machine learning, and various techniques to inform decision-making and solve complex problems.</p>
+            <p>Coordinator: Jane Doe</p>
+            <p>Date and Time: March 2, 2024 - 2:00 PM</p>
+            <button class="delete-btn" onclick="deleteCourse(this)">Delete</button>
+        </div>
+         <div class="course-card">
+            <h2>Data Structures and Algorithm</h2>
+            <p>Description: Data structures and algorithms are foundational concepts in computer science; data structures organize and store data, while algorithms provide step-by-step procedures for solving problems or performing operations efficiently.</p>
+            <p>Coordinator: Jane Doe</p>
+            <p>Date and Time: March 18, 2024 - 2:00 PM</p>
+            <button class="delete-btn" onclick="deleteCourse(this)">Delete</button>
+        </div>
+         <div class="course-card">
+            <h2>Java</h2>
+            <p>Description: Java is a versatile, object-oriented programming language known for its platform independence and extensive ecosystem, used in a wide range of applications from web development to enterprise systems.</p>
+            <p>Coordinator: Jane Doe</p>
+            <p>Date and Time: March 28, 2024 - 2:00 PM</p>
+            <button class="delete-btn" onclick="deleteCourse(this)">Delete</button>
+        </div>
+
+        <div class="footer-placeholder"></div>
+    </main>
+
+    <footer> 
+          <h3>Contact Us</h3>
+          <p>Email: info@twoprime.com<br>
+         Phone: +1 (123) 456-7890<br>
+          Location: 123 Tech Street, Cityville, Country</p>
+</footer>
+
+    <div id="addCourseModal">
+        
+        <h2>Add Course</h2>
+        <form>
+            <label for="courseName">Course Name:</label>
+            <input type="text" id="courseName" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" required></textarea>
+
+            <label for="coordinator">Coordinator:</label>
+            <input type="text" id="coordinator" required>
+
+            <label for="dateTime">Date and Time:</label>
+            <input type="datetime-local" id="dateTime" required>
+
+            <button type="button" onclick="saveCourse()">Save</button>
+            <button id="closeModalBtn" onclick="closeModal()">Close</button>
+        </form>
+    </div>
+   
+
+    <script>
+        function openModal() {
+            document.getElementById('addCourseModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('addCourseModal').style.display = 'none';
+        }
+        function goToHomePage() {
+       
+        window.location.href = 'index.html';
+    }
+        function saveCourse() {
+            // Get input values
+            var courseName = document.getElementById('courseName').value;
+            var description = document.getElementById('description').value;
+            var coordinator = document.getElementById('coordinator').value;
+            var dateTime = document.getElementById('dateTime').value;
+
+            // Create a new course card
+            var newCard = document.createElement('div');
+            newCard.className = 'course-card';
+            newCard.innerHTML = `
+                <h2>${courseName}</h2>
+                <p>Description: ${description}</p>
+                <p>Coordinator: ${coordinator}</p>
+                <p>Date and Time: ${new Date(dateTime).toLocaleString()}</p>
+                <button class="delete-btn" onclick="deleteCourse(this)">Delete</button>
+            `;
+
+            // Append the new card to the main section
+            document.querySelector('main').appendChild(newCard);
+
+            // Close the modal
+            closeModal();
+        }
+
+        function deleteCourse(button) {
+            var courseCard = button.parentNode;
+            courseCard.parentNode.removeChild(courseCard);
+        }
+    </script>
