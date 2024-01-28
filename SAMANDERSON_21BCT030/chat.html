@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #chat-room {
+            height: 400px;
+            overflow-y: scroll;
+        }
+
+        #messages li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        #messages img {
+            margin-right: 10px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+        }
+
+        #message-input {
+            width: 80%;
+        }
+
+        #logout-btn {
+            margin-top: 10px;
+        }
+        #discord-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        #discord-logo {
+            width: 50px; /* Adjust the size as needed */
+            height: auto; /* Maintain aspect ratio */
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        #discord-link a {
+            vertical-align: middle;
+            margin-left: 10px; /* Adjust the spacing as needed */
+        }
+    </style>
+</head>
+<body>
+
+<div id="login-section" class="text-center mt-5">
+    <h4>Login to Chat</h4>
+    <button id="login-btn" class="btn btn-primary">Login with Google</button>
+</div>
+
+
+<div id="chat-section" class="container" style="display: none;">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">TWO-PRIME</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="home.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.html">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="chat.html">Community Chat</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="courses.html">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="services.html">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact Us</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    <h2 class="text-center mt-5">Community Chat</h2>
+    <div id="chat-room" class="border rounded p-4 mt-4">
+        <ul id="messages" class="list-unstyled"></ul>
+    </div>
+    <form id="message-form" class="form-inline mt-4">
+        <input type="text" id="message-input" class="form-control mr-2" placeholder="Enter your message">
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+    
+    <div id="discord-link">
+      <img id="discord-logo" src="discord.jpeg" alt="Discord Logo">
+      <a href="https://discord.com/invite/your-discord-link" target="_blank">Join our Discord Community</a>
+  </div>
+</div>
+
+
+
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+<script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
+    import { getAuth, signInWithPopup, signOut, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
+    import { getDatabase, ref, push, serverTimestamp, onChildAdded, orderByChild, query, off } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyBr6jzlfPx6dFBC9fr2R-a6xg4amJivH40",
+      authDomain: "two-prime.firebaseapp.com",
+      databaseURL: "https://two-prime-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "two-prime",
+      storageBucket: "two-prime.appspot.com",
+      messagingSenderId: "1032825554297",
+      appId: "1:1032825554297:web:c0b1cd546f5dfa24d99ba8",
+      measurementId: "G-HR91QHZHCX"
+    };
+  
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    const provider = new GoogleAuthProvider();
+    
+    function attachMessageListener() {
+      const messagesRef = query(ref(database, 'messages'), orderByChild('timestamp'));
+      onChildAdded(messagesRef, (snapshot) => {
+        const data = snapshot.val();
+        const messageElement = document.createElement('li');
+        
+        if (data.photoURL) {
+          const img = document.createElement('img');
+          img.src = data.photoURL;
+          img.style.width = '30px';
+          img.style.height = '30px';
+          img.style.borderRadius = '50%';
+          messageElement.appendChild(img);
+        }
+  
+        const nameElement = document.createElement('strong');
+        nameElement.textContent = data.name + ': ';
+        messageElement.appendChild(nameElement);
+  
+        const textNode = document.createTextNode(data.message);
+        messageElement.appendChild(textNode);
+  
+        document.getElementById('messages').appendChild(messageElement);
+      });
+    }
+  
+    function detachMessageListener() {
+      const messagesRef = query(ref(database, 'messages'), orderByChild('timestamp'));
+      off(messagesRef, 'child_added');
+    }
+  
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('chat-section').style.display = 'block';
+        attachMessageListener();
+      } else {
+        document.getElementById('login-section').style.display = 'block';
+        document.getElementById('chat-section').style.display = 'none';
+        detachMessageListener();
+        document.getElementById('messages').innerHTML = '';
+      }
+    });
+  
+    document.getElementById('login-btn').addEventListener('click', () => {
+      signInWithPopup(auth, provider);
+    });
+  
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      signOut(auth);
+    });
+  
+    document.getElementById('message-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const messageInput = document.getElementById('message-input');
+      const message = messageInput.value.trim();
+  
+      if (message) {
+        push(ref(database, 'messages'), {
+          name: auth.currentUser.displayName,
+          photoURL: auth.currentUser.photoURL || 'https://www.example.com/default-avatar.png',
+          message: message,
+          timestamp: serverTimestamp()
+        });
+        messageInput.value = '';
+      }
+    });
+  </script>
+  
+</body>
+</html>

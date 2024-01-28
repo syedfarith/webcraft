@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses Offered</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff6ac1 0%, #4b47ec 100%);
+            color: white;
+            text-shadow: 2px 2px 4px #000000;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h2 {
+            color: #fff;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .course-card {
+            background: linear-gradient(135deg, rgba(255, 106, 193, 0.8) 0%, rgba(75, 71, 236, 0.8) 100%);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .course-image {
+            height: 350px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .course-title {
+            color: #fff;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .course-description {
+            padding: 0 15px 15px;
+            text-align: center;
+            color: #ccc;
+        }
+
+        @media (max-width: 768px) {
+            .course-card {
+                margin: 0 10px;
+                flex: 0 0 calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .course-card {
+                flex: 0 0 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Two-Prime</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="chat.html">Community Chat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="services.html">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h2>Our Courses</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="course-card">
+                    <div class="course-image" style="background-image: url('assets/weby.png');"></div>
+                    <h3 class="course-title">Web Development</h3>
+                    <p class="course-description">Learn to build websites and web applications using HTML, CSS, JavaScript, and more.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="course-card">
+                    <div class="course-image" style="background-image: url('assets/andy.png');"></div>
+                    <h3 class="course-title">Mobile Development</h3>
+                    <p class="course-description">Develop mobile applications for Android and iOS platforms using modern frameworks.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="course-card">
+                    <div class="course-image" style="background-image: url('assets/digi.jpeg');"></div>
+                    <h3 class="course-title">Digital Marketing</h3>
+                    <p class="course-description">Master digital marketing strategies including SEO, PPC, social media, and content marketing.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
